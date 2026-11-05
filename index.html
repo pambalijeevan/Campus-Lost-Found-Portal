@@ -712,24 +712,38 @@
                 body: JSON.stringify(data)
             });
             const result = await res.json();
-                
-            if (res.ok) {
-                    // Store email for pre-filling login form
-                    signupEmail = data.email;
-                    showNotification(result.message || "Signup successful! Please check your email to verify your account.");
-                    navigateTo('verification');
-            } else {
-                showNotification(result.error || "Signup failed", true);
-                }
-            } catch (error) {
-                showNotification("Network error. Please try again.", true);
-            } finally {
-                // Reset button state
-                signupBtn.disabled = false;
-                signupBtnText.textContent = 'Sign Up';
-                signupBtnSpinner.classList.add('hidden');
-            }
-        }
+    
+if (res.ok) {
+    // Store email for pre-filling login form
+    signupEmail = data.email;
+
+    // Show success message
+    showNotification("Account created successfully!");
+
+    // Switch directly to Login form
+    toggleAuthForms(null, true);
+
+    // Automatically fill registered email
+    document.querySelector('#loginForm input[name="email"]').value = data.email;
+
+    // Clear signup form
+    form.reset();
+
+} else {
+    showNotification(result.error || "Signup failed", true);
+}
+
+} catch (error) {
+    console.error("Signup error:", error);
+    showNotification("Network error. Please try again.", true);
+
+} finally {
+    // Reset button state
+    signupBtn.disabled = false;
+    signupBtnText.textContent = 'Sign Up';
+    signupBtnSpinner.classList.add('hidden');
+}
+}
 
         async function login(e) {
             e.preventDefault();
