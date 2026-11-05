@@ -302,7 +302,7 @@ def verify_email():
             <div class="container">
                 <h2 class="error">Verification Failed</h2>
                 <p>No verification token provided.</p>
-                <a href="https://campus-lost-found-portal-iizc.onrender.com" class="btn">Go to App</a>
+               verification_url = f"https://campus-lost-found-portal-iizc.onrender.com/verify_email?token={token}"
             </div>
         </body>
         </html>
