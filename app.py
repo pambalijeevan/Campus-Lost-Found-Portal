@@ -429,9 +429,7 @@ def login():
         if not user_row or not check_password_hash(user_row["password_hash"], data['password']):
             return jsonify({'error': 'Invalid email or password'}), 401
         
-        # Check if email is verified
-        if not user_row['email_verified']:
-            return jsonify({'error': 'Please verify your email before logging in. Check your inbox for the verification link.'}), 403
+       
         
         user_dict = row_to_dict(user_row)
         del user_dict['password_hash']
