@@ -217,8 +217,12 @@ def item_with_images_dict(con, item_row: sqlite3.Row) -> Dict[str, Any]:
 # Routes
 # -----------------------
 @app.route("/")
-def health(): 
+def home():
+    return send_from_directory(BASE_DIR, "index.html")
+@app.route("/health")
+def health():
     status = {"status": "ok"}
+
     if image_matcher is not None:
         status["image_matching"] = {
             "available": True,
@@ -229,6 +233,7 @@ def health():
             "available": False,
             "method": None
         }
+
     return jsonify(status)
 
 @app.route("/signup", methods=["POST"])
