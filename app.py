@@ -237,47 +237,52 @@ def health():
 
     return jsonify(status)
 
+
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
+
     if not data or not data.get('email') or not data.get('password') or not data.get('name'):
         return jsonify({"error": "Name, email and password are required"}), 400
-    
+
     # Validate password strength
     is_valid, error_message = validate_password(data['password'])
     if not is_valid:
         return jsonify({"error": error_message}), 400
-    
+
     password_hash = generate_password_hash(data['password'])
-    verification_token = generate_verification_token()
-    
+
     with get_db() as con:
-        # Check for existing username and email before inserting
+        # Check for existing username and email
         existing_user = con.execute(
-            "SELECT name, email FROM users WHERE name = ? OR email = ?", 
-            (data.get('name', ''), data['email'].lower())
+            "SELECT name, email FROM users WHERE name = ? OR email = ?",
+            (data['name'], data['email'].lower())
         ).fetchone()
-        
+
         if existing_user:
-            if existing_user['name'] == data.get('name', ''):
+            if existing_user['name'] == data['name']:
                 return jsonify({"error": "Username already exists. Please choose a different name."}), 409
             elif existing_user['email'] == data['email'].lower():
                 return jsonify({"error": "Email already exists"}), 409
-        
+
         try:
             cur = con.execute(
-                "INSERT INTO users (name, email, password_hash, email_verified, verification_token, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-                (data.get('name', ''), data['email'].lower(), password_hash, True, None, now_str())
+                """
+                INSERT INTO users
+                (name, email, password_hash, email_verified,
+                 verification_token, created_at)
+                VALUES (?, ?, ?, TRUE, NULL, ?)
+                """,
+                (data['name'], data['email'].lower(), password_hash, now_str())
             )
             con.commit()
-            
-            # Send verification email
-          email_sent = False
-          return jsonify({
-    "user_id": cur.lastrowid,
-    "message": "Account created successfully!",
-    "email_sent": False
-}), 201
+
+            return jsonify({
+                "user_id": cur.lastrowid,
+                "message": "Account created successfully!",
+                "email_sent": False
+            }), 201
+
         except sqlite3.IntegrityError:
             return jsonify({"error": "User already exists"}), 409
 
