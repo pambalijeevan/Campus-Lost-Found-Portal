@@ -173,7 +173,8 @@ def generate_verification_token() -> str:
 
 def send_verification_email(email: str, name: str, token: str):
     """Send email verification email"""
-   verification_url = f"https://campus-lost-found-portal-iizc.onrender.com/verify_email?token={token}"
+
+    verification_url = f"https://campus-lost-found-portal-iizc.onrender.com/verify_email?token={token}"
     
     msg = Message(
         "Verify Your Email - BEC Lost & Found",
