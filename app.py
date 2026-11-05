@@ -267,18 +267,17 @@ def signup():
         try:
             cur = con.execute(
                 "INSERT INTO users (name, email, password_hash, email_verified, verification_token, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-                (data.get('name', ''), data['email'].lower(), password_hash, False, verification_token, now_str())
+                (data.get('name', ''), data['email'].lower(), password_hash, True, None, now_str())
             )
             con.commit()
             
             # Send verification email
-            email_sent = send_verification_email(data['email'], data.get('name', ''), verification_token)
-            
-            return jsonify({
-                "user_id": cur.lastrowid,
-                "message": "Account created! Please check your email to verify your account.",
-                "email_sent": email_sent
-            }), 201
+          email_sent = False
+          return jsonify({
+    "user_id": cur.lastrowid,
+    "message": "Account created successfully!",
+    "email_sent": False
+}), 201
         except sqlite3.IntegrityError:
             return jsonify({"error": "User already exists"}), 409
 
