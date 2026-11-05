@@ -173,7 +173,7 @@ def generate_verification_token() -> str:
 
 def send_verification_email(email: str, name: str, token: str):
     """Send email verification email"""
-    verification_url = f"http://127.0.0.1:5000/verify_email?token={token}"
+   verification_url = f"https://campus-lost-found-portal-iizc.onrender.com/verify_email?token={token}"
     
     msg = Message(
         "Verify Your Email - BEC Lost & Found",
@@ -302,7 +302,7 @@ def verify_email():
             <div class="container">
                 <h2 class="error">Verification Failed</h2>
                 <p>No verification token provided.</p>
-                <a href="http://127.0.0.1:5000" class="btn">Go to App</a>
+                <a href="https://campus-lost-found-portal-iizc.onrender.com" class="btn">Go to App</a>
             </div>
         </body>
         </html>
@@ -328,7 +328,7 @@ def verify_email():
                 <div class="container">
                     <h2 class="error">Verification Failed</h2>
                     <p>Invalid or expired verification token.</p>
-                    <a href="http://127.0.0.1:5000" class="btn">Go to App</a>
+                    <a href="https://campus-lost-found-portal-iizc.onrender.com" class="btn">Go to App</a>
                 </div>
             </body>
             </html>
@@ -382,7 +382,7 @@ def verify_email():
             <div class="container">
                 <h2 class="success">Email Verified Successfully!</h2>
                 <p>Your email has been verified. You can now log in to your account.</p>
-                <a href="http://127.0.0.1:5000" class="btn">Go to App</a>
+                <a href="https://campus-lost-found-portal-iizc.onrender.com" class="btn">Go to App</a>
             </div>
         </body>
         </html>
